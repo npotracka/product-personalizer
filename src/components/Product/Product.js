@@ -1,46 +1,40 @@
 import styles from './Product.module.scss';
-import clsx from 'clsx';
-import Button from '../Button/Button';
+import { useState } from 'react';
+import ProductOptions from '../ProductOptions/ProductOptions';
+import ProductImage from '../ProductImage/ProductImage'; 
 
-const Product = props => {
+  const Product = props => {
+  const [currentSize, setSize] = useState(`${props.sizes[0].name}`);
+  const [currentColor, setColor] = useState(`${props.colors[0]}`);
+
+  const getPrice = () => {
+    const size = props.sizes.find((size) => size.name === currentSize);
+    return props.basePrice + size.additionalPrice;
+  };
+  const submitHandler = e => {
+    e.preventDefault();
+  }
+
   return (
     <article className={styles.product}>
-      <div className={styles.imageContainer}>
-        <img 
-          className={styles.image}
-          alt="Kodilla shirt"
-          src={`${process.env.PUBLIC_URL}/images/products/shirt-kodilla--black.jpg`} />
-      </div>
+      <ProductImage title={props.title} name={props.name} currentColor={currentColor} />
       <div>
         <header>
-          <h2 className={styles.name}>Kodilla shirt</h2>
-          <span className={styles.price}>Price: 20$</span>
+          <h2 className={styles.name}>{props.title}</h2>
+          <span className={styles.price}>Price: {getPrice()}$</span>
         </header>
-        <form>
-          <div className={styles.sizes}>
-            <h3 className={styles.optionLabel}>Sizes</h3>
-            <ul className={styles.choices}>
-              <li><button type="button" className={styles.active}>S</button></li>
-              <li><button type="button">M</button></li>
-              <li><button type="button">L</button></li>
-              <li><button type="button">XL</button></li>
-            </ul>
-          </div>
-          <div className={styles.colors}>
-            <h3 className={styles.optionLabel}>Colors</h3>
-            <ul className={styles.choices}>
-              <li><button type="button" className={clsx(styles.colorBlack, styles.active)} /></li>
-              <li><button type="button" className={clsx(styles.colorRed)} /></li>
-              <li><button type="button" className={clsx(styles.colorWhite)} /></li>
-            </ul>
-          </div>
-          <Button className={styles.button}>
-            <span className="fa fa-shopping-cart" />
-          </Button>
-        </form>
+        <ProductOptions 
+          setSize={setSize}
+          setColor={setColor}
+          onSize={props.sizes}
+          onColor={props.colors}
+          currentColor={currentColor}
+          currentSize={currentSize}
+          submitHandler={submitHandler}
+        />
       </div>
     </article>
   )
-};
+  };
 
 export default Product;
