@@ -10,9 +10,11 @@ import ProductImage from '../ProductImage/ProductImage';
   const getPrice = () => {
     const size = props.sizes.find((size) => size.name === currentSize);
     return props.basePrice + size.additionalPrice;
-  };
-  const submitHandler = e => {
+  }; 
+
+  const addToShoppingCart = (e) => {
     e.preventDefault();
+    props.action({ id: props.id, title: props.title, size: currentSize, color: currentColor, price: getPrice })
   }
 
   return (
@@ -30,7 +32,7 @@ import ProductImage from '../ProductImage/ProductImage';
           onColor={props.colors}
           currentColor={currentColor}
           currentSize={currentSize}
-          submitHandler={submitHandler}
+          action={addToShoppingCart}
         />
       </div>
     </article>
